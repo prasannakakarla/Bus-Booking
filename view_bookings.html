@@ -1,0 +1,93 @@
+{% if session['role'] == 'Bus Owner' %}
+    {% include 'bhead.html'%}
+{% endif %}
+
+{% if session['role'] == 'customer' %}
+    {% include 'chead.html'%}
+{% endif %}
+
+{% if session['role'] == 'admin' %}
+    {% include 'ahead.html'%}
+{% endif %}
+
+
+<div class="row">
+     {% for booking in bookings %}
+    {% set discount = get_discount_applied(booking['_id'])%}
+     {% set schedule = get_schedule_by_schedule_id(booking['schedule_id']) %}
+      {% set source_location = get_source_location_name_by_source_location_id(schedule['Source_location_id']) %}
+      {% set destination_location = get_destination_location_name_by_destination_location_id(schedule['Destination_location_id'])%}
+     {% set bus = get_bus_by_bus_id(schedule['bus_id']) %}
+     {% set customer = get_customer_by_customer_id(booking['customer_id']) %}
+
+    <div class="card margin mt-50 p-20">
+        <div class="row">
+            <div class="col-4">
+                <div class="p-10">
+                <img src="../static/bus_image/{{bus['bus_image']}}" style="height:40px">
+               </div>
+            </div>
+            <div class="col-4"></div>
+            <div class="col-4">
+                 <div class="p-10 h3">
+                <b>{{booking['status']}}</b>
+               </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-4 p-5">
+                {{bus['bus_name']}}({{bus['bus_number']}})
+            </div>
+            <div class="col-4 p-5">Departure : {{booking['departureDate'].strftime("%Y-%m-%d")}}</div>
+            <div class="col-4 p-5">Total Price : <a href="view_payments?booking_id={{booking['_id']}}">${{booking['total_price']}}</a></div>
+            <div class="col-4 p-5">From: {{source_location['location_name']}}</div>
+            <div class="col-4 p-5">To: {{destination_location['location_name']}}</div>
+            <div class="col-4 p-5">Customer : {{customer['name']}} ({{customer['phone']}})</div>
+            {% if booking['status'] == 'Booked' %}
+                {% if not booking['is_past'] %}
+                    if you cancel now u will get {{discount}} amount
+                {% else %}
+                    <b style="color: gray;">Journey completed</b>
+                {% endif %}
+            {% endif %}
+
+
+
+        </div>
+
+        <table border="1" style="width:100%">
+            <thead>
+              <tr>
+                  <th>Seat</th>
+                  <th>Name</th>
+                  <th>Phone</th>
+                  <th>Age</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for seat in booking['seat_numbers']%}
+                <tr>
+                    <td>{{seat['seat_number']}}</td>
+                    <td>{{seat['name']}}</td>
+                     <td>{{seat['phone']}}</td>
+                    <td>{{seat['age']}}</td>
+                </tr>
+               {% endfor %}
+            </tbody>
+        </table>
+    {% if session['role']=='customer' and booking['status']=='Booked' and not booking['is_past'] %}
+        <form action="cancel_booking">
+            <input type=hidden name=booking_id value = "{{booking['_id']}}">
+            <input type="hidden" name="discount" value="{{discount}}">
+            <input type="submit" value="Cancel booking" class="mt-15 p-10" style="background:red;color:white">
+        </form>
+    {% endif %}
+
+        {% if 'refund_amount' in booking%}
+        Refund Amount  : {{booking['refund_amount']}}
+        {% endif%}
+    </div>
+    {% endfor %}
+</div>

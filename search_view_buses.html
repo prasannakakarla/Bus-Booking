@@ -1,0 +1,117 @@
+{% include 'chead.html' %}
+<form action="search_view_buses">
+<div class="row p-10 mt-10">
+    <div class="col-2"></div>
+    <div class="col-8">
+            <div class="card mt-20">
+                <div class="row">
+                <div class="col-3 p-10">
+                    <label></label>
+                                <select name="source_location" class="form-control" required>
+                                    <option selected="selected" value="" disabled="disabled">From Location</option>
+                                    {% for location in locations %}
+                                    <option value="{{location['_id']}}" {% if str(location['_id'])==str(locations_id) %}
+                                        selected {% endif %}>{{location['location_name']}}</option>
+                                    {% endfor %}
+                                </select>
+                </div>
+                <div class="col-3 p-10">
+                    <label></label>
+                    <select name="destination_location" class="form-control" required>
+                        <option selected="selected" value="" disabled="disabled">To Location</option>
+                        {% for location in locations2 %}
+                        <option value="{{location['_id']}}" {% if str(location['_id'])==str(locations_id) %}
+                            selected {% endif %}>{{location['location_name']}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-3">
+                    <div class="p-10 container text-font">
+                    <label class="" for="Arrival Date Time"></label>
+                    <div class="form-group w-100">
+                        <input type="date" name="departureDate" id="Arrival Date Time"
+                            placeholder="Enter email" class="form-control" required>
+                    </div>
+                </div>
+                </div>
+                <div class="col-3">
+                        <input type="submit" class="btn-1 btn-primary-1 text-white w-70 mt-10" style="margin-left : 40" value="Search">
+                </div>
+                </div>
+            </div>
+    </div>
+    <div class="col-2"></div>
+</div>
+
+</form>
+       {% if source_location!="" and destination_location!=""%}
+        {% set source_location = get_source_location_name_by_source_location_id(source_location) %}
+        {% set destination_location =
+        get_destination_location_name_by_destination_location_id(destination_location)%}
+    <div class="row mt-20">
+            <div class="col-4">
+                <div class="h4" style="text-align:center">{{departureDate}}</div>
+            </div>
+             <div class="col-4">
+                  <div class="h4" style="text-align:center">{{source_location['location_name']}} ->
+                {{destination_location['location_name']}}</div>
+             </div>
+        </div>
+{% endif%}
+
+<div class="row mt-30">
+    <div class="col-1"></div>
+
+
+    <div class="col-10">
+        {% for schedule in schedules %}
+        {% set date_format = get_date_format(schedule['Departure_date_time'])%}
+         {% set date_format2 = get_date_format(schedule['Arrival_date_time'])%}
+        {% set bus = get_bus_by_bus_id(schedule['bus_id'])%}
+        {% set remain_seats = get_remain_seats(schedule['_id'],departureDate,bus['available_seats'])%}
+        {% set bus_owner = get_bus_owner_name_by_bus_owner_id(bus['bus_owner_id']) %}
+        <div class="card row mt-5">
+            <div class="col-8">
+
+                <div class="row">
+                    <div class="col-4 p-20">
+                         <img src="../static/bus_image/{{bus['bus_image']}}" class="bus_image7">
+                    <div class="h5" style="text-transform: uppercase;">{{bus['bus_name']}}({{bus['bus_number']}})</div>
+                    </div>
+                     <div class="col-8 p-20">
+                         <div class="row">
+                             <div class="col-6">
+                                 <div class="mt-5 h5">BusType : {{bus['bus_type']}}</div>
+                                   <div class="mt-10 h5">Total Seats: {{bus['available_seats']}}</div>
+                                     <div class="mt-10 h5">Bus Number: {{bus['bus_number']}}</div>
+                             </div>
+                              <div class="col-6">
+                                  <div class="mt-5 h5">Departure : {{date_format.strftime("%Y-%m-%d %I:%M %p")}}</div>
+                                  <div class="mt-10 h5">Arrival : {{date_format2.strftime("%Y-%m-%d %I:%M %p")}}</div>
+                                   <div class="mt-10 h5">Source Platform : {{schedule['Departure_platform_number']}}</div>
+                              </div>
+                         </div>
+
+                     </div>
+                </div>
+            </div>
+            <div class="col-4 mt-0 h5" style="border-left:2px solid black;">
+                <div class="mt-5 ml-40 "> <b> Available : {{remain_seats}}</b></div>
+                <div class="mt-40 ml-40 p-20"> <b>${{schedule['Price_per_seat']}}</b></div>
+                <form action="book_bus">
+                    <input type = "hidden" name="source_location" value="{{source_location['_id']}}">
+                    <input type = "hidden" name="destination_location" value="{{destination_location['_id']}}">
+                    <input type = "hidden" name="available_seats" value="{{ bus['available_seats'] }}">
+                     <input type = "hidden" name="departureDate" value="{{departureDate}}">
+                    <input type = "hidden" name="price" value="{{schedule['Price_per_seat']}}">
+                    <input type = "hidden" name="schedule_id" value="{{schedule['_id']}}">
+                    <div class="p-10">
+                    <input type="submit" value="Book" class="p-10 ml-40"  style="width:50%">
+                    </div>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="col-1"></div>
+</div>

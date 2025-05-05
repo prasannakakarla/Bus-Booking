@@ -1,0 +1,59 @@
+{% include 'bhead.html'%}
+<body>
+  <div class="row">
+      <div class="col-2"></div>
+      <div class="col-4 mt-30">
+        <div class="card-2  ">
+              <div class="title text-center">
+                Add Bus
+              </div>
+              <form action="add_bus_action" enctype="multipart/form-data" method="post">
+                <div>
+                      <label for="bus_number" ></label>
+                      <div class="form-group p-15">
+                        <input type="text" name="bus_number" id="bus_number" class="form-control" placeholder=" Enter Bus number">
+                      </div>
+
+                </div>
+                <div>
+                      <label for="bus_name" ></label>
+                      <div class="form-group p-15">
+                        <input type="text" name="bus_name" id="bus_name" class="form-control" placeholder=" Enter Bus Name">
+                      </div>
+
+                </div>
+                <div>
+                      <label for="bus_type" ></label>
+                      <div class="form-group p-15">
+                        <input type="text" name="bus_type" id="bus_type" class="form-control" placeholder=" Enter Bus type">
+                      </div>
+
+                </div>
+                <div>
+                  <label for="available_seats" ></label>
+                  <div class="form-group p-15">
+                    <input type="text" name="available_seats" id="available_seats" class="form-control" placeholder=" Enter available seats">
+                  </div>
+
+                </div>
+                <div>
+                  <label for="bus_image" ></label>
+                  <div class="form-group p-15">
+                    <input type="file" name="bus_image" id="bus_image" class="form-control" >
+                  </div>
+                </div>
+
+                <div class="p-20">
+                  <input type="submit" class=" btn btn-primary" value="Add">
+                </div>
+              </form>
+        </div>
+      </div>
+      <div class="col-4">
+          <div class="bk">
+              .
+          </div>
+      </div>
+      <div class="col-2"></div>
+  </div>
+</body>

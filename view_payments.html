@@ -1,0 +1,40 @@
+{% if session['role'] == 'Bus Owner' %}
+    {% include 'bhead.html'%}
+{% endif %}
+
+{% if session['role'] == 'customer' %}
+    {% include 'chead.html'%}
+{% endif %}
+
+{% if session['role'] == 'admin' %}
+    {% include 'ahead.html'%}
+{% endif %}
+
+<div class="title text-center p-20"> Payments</div>
+<div class="p-20">
+  <table border="1" class="table margin ">
+    <thead>
+      <tr>
+        <th>Total_price</th>
+        <th>status</th>
+        <th>Date</th>
+        <th>Card Type</th>
+        <th>Customer Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for payment in payments %}
+      {% set booking = get_booking_by_booking_id(payment['booking_id']) %}
+      {% set customer = get_customer_by_customer_id(booking['customer_id']) %}
+      <tr>
+        <td>{{payment['total_price']}}</td>
+        <td>{{payment['status']}}</td>
+        <td>{{payment['date'].strftime("%Y-%d-%m %I:%M %p")}}</td>
+        <td>{{payment['card_type']}}</td>
+        <td>{{customer['name']}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+
+  </table>
+</div>

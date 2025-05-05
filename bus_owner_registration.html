@@ -1,0 +1,48 @@
+{% include 'head2.html' %}
+<body class="bus_owner_img">
+    .
+</body>
+<div class="row p-10">
+        <div class="col-4"></div>
+        <div class="col-4 ">
+            <div class="card bg-white mt font p-20">
+                <div class="title text-center "> Bus Owner registration Form</div>
+                <form action="bus_owner_registration_action" method="post">
+                    <div class="p-10 container text-font">
+                        <label class="" for="name"></label>
+                        <div class="form-group w-100 ">
+                            <input type="text" name="name" id="name" placeholder="Enter name" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="p-10 container text-font">
+                        <label class="" for="email"></label>
+                        <div class="form-group w-100">
+                            <input type="email" name="email" id="email" placeholder="Enter email" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="p-10 container text-font">
+                        <label class="" for="phone"></label>
+                        <div class="form-group w-100">
+                            <input type="number" name="phone" id="phone" placeholder="Enter phone" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="p-10 container text-font">
+                        <label class="" for="address"></label>
+                        <div class="form-group w-100">
+                            <input type="text area" name="address" id="address" placeholder="Enter address" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="p-10 container text-font">
+                        <label class="" for="password"></label>
+                        <div class="form-group w-100">
+                            <input type="text" name="password" id="password" placeholder="Enter Password" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="p-10 text-font font container">
+                        <input type="submit" class="btn btn-secondary text-white mt-20" value="Register">
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-4"></div>
+</div>

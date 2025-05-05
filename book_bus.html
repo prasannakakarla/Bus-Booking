@@ -1,0 +1,158 @@
+{% include 'chead.html' %}
+<style>
+  .seats{
+    display: none;
+  }
+  .seats ~ label{
+    display: block;
+  }
+
+  .seats:checked~label{
+   background-color:beige;
+  }
+  .seat-image {
+    height: 60px;
+    width: 80px;
+    object-fit: contain;
+  }
+  .seat-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .seat-item {
+    text-align: center;
+    margin: 5px;
+  }
+</style>
+
+<script>
+  let selectedSeats = [];
+
+  function selectedSeat(seat) {
+    seat = parseInt(seat);
+    let isSelected= document.getElementById("seat"+seat).checked;
+    console.log(isSelected);
+    if(isSelected){
+        const index = selectedSeats.indexOf(seat);
+        console.log(index);
+        
+        if(index >= 0){
+          selectedSeats.splice(index,1);
+        }
+    }else{
+      selectedSeats.push(seat);
+    }
+    selectedSeats.sort(function(a,b){return a-b})
+    setUI();
+
+  }
+
+  function setUI() {
+  console.log(selectedSeats);
+  let ui =`<div class="row card p-10">`
+  for(let i=0;i<selectedSeats.length;i++){
+    ui = ui+`
+                   <div id="total_price" class="h4" name="total_price"></div>
+
+       <div class="col-12  mt-10">
+       <div class="row">
+         <div class="col-2">Seat ${selectedSeats[i]}</div>
+         <div class="col-3 p-10">
+          <input type="text" name="name${selectedSeats[i]}" id="name${selectedSeats[i]}" placeholder="Name" class="form-control" required>
+         </div>
+         <div class="col-3 p-10">
+         <input type="number" name="phone${selectedSeats[i]}" id="phone${selectedSeats[i]}" placeholder="Phone" class="form-control" required></div>
+       </di>
+        <div class="col-2 p-10">
+         <input type="number" name="age${selectedSeats[i]}" id="age${selectedSeats[i]}" placeholder="Age" class="form-control" required></div>
+       </di>
+
+       </div>
+
+    `
+    }
+      
+    ui = ui+`
+     <input type="submit" value="Book" class="mt-20" style="width:20%">
+    `
+    console.log(ui);
+    document.getElementById("customers").innerHTML=ui;
+    let price = document.getElementById("price").value;
+    document.getElementById("number_of_seats").value=selectedSeats.length;
+    document.getElementById("total_price").innerHTML=`<div>${selectedSeats.length} Seats =>$ ${price*selectedSeats.length}</div>`;
+
+  }
+</script>
+<div class="row p-40" >
+  <div class="col-1"></div>
+  <form action="book_bus_action" method="post">
+    <input type="hidden" id="schedule_id" name="schedule_id" value="{{schedule_id}}">
+    <input type="hidden" id="bus_id" name="bus_id">
+    <input type="hidden" id="departureDate" name="departureDate" value="{{departureDate}}">
+  <div class="col-10 p-10" style="width:100%">
+      {% set bus = get_bus_by_bus_id(schedule['bus_id'])%}
+    {% set remain_seats = get_remain_seats(schedule['_id'],departureDate,bus['available_seats'])%}
+      {% set source_location = get_source_location_name_by_source_location_id(schedule['Source_location_id']) %}
+      {% set destination_location = get_destination_location_name_by_destination_location_id(schedule['Destination_location_id'])%}
+
+      <div class="card p-10 mt-10">
+        <input type="hidden" id="number_of_seats" name="number_of_seats">
+
+        <div class="h4" style="text-align:center">
+          {{source_location['location_name']}} → {{destination_location['location_name']}}
+        </div>
+        <div class="row mt-10">
+          <div class="col-3">Price: <b>${{schedule['Price_per_seat']}}</b></div>
+           <div class="col-3">Total Seats: <b>{{bus['available_seats']}}</b> </div>
+          <div class="col-3">Available : <b>{{remain_seats}}</b></div>
+          <div class="col-3"><b>{{departureDate2.strftime("%Y-%m-%d")}}</b></div>
+        </div>
+      </div>
+
+      <div class="card p-10 mt-10">
+
+
+     <input type="hidden" id="price" value="{{schedule['Price_per_seat']}}">
+        <div class="row">
+          <div class="col-6">
+            <div class="seat-container">
+              {% for i in range(1, int(bus['available_seats']) + 1) %}
+                {% set  is_seat_booked = get_is_seat_booked(departureDate,i,schedule_id) %}
+                {% if is_seat_booked%}
+                <div class="seat-item">
+                  <input type="checkbox" class="seats" disabled  name="seat{{i}}"   id="seat{{i}}1">
+                  <div style="text-align:center">{{i}}</div>
+                  <label for="seat{{i}}" onclick="selectedSeat('{{i}}')">
+                    <img src="../static/red_seat.png"
+
+                         class="seat-image"
+                         alt="Seat {{i}}" >
+                  </label>
+                </div>
+                {% else%}
+                <div class="seat-item">
+                  <input type="checkbox" class="seats"  name="seat{{i}}"   id="seat{{i}}">
+                  <div style="text-align:center">{{i}}</div>
+                  <label for="seat{{i}}" onclick="selectedSeat('{{i}}')">
+                    <img src="../static/display_seat2.png"
+                         id="seat{{i}}img"
+                         class="seat-image"
+                         alt="Seat {{i}}" >
+                  </label>
+                </div>
+                {% endif%}
+              {% endfor %}
+            </div>
+          </div>
+          <div class="col-6" id="customers">
+          </div>
+        </div>
+      </div>
+  </div>
+  </form>
+
+  <div class="col-1">
+
+  </div>
+</div>

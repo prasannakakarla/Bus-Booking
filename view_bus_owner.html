@@ -1,0 +1,40 @@
+{% include 'ahead.html'%}
+<body class="bg_img">
+  .
+</body>
+<div class="title text-center p-20"> Bus Owners List</div>
+<div class="p-20">
+  <table border="1" class="table margin ">
+    <thead>
+      <tr>
+        <th>bus_owner_Id</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>phone</th>
+        <th>Address</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for bus_owner in bus_owners%}
+      <tr>
+        <td>{{bus_owner['_id']}}</td>
+        <td>{{bus_owner['name']}}</td>
+        <td>{{bus_owner['email']}}</td>
+        <td>{{bus_owner['phone']}}</td>
+        <td>{{bus_owner['address']}}</td>
+        <td>{{bus_owner['status']}}</td>
+        <td>
+          {% if bus_owner['status'] == 'unauthorized' %}
+          <a href="authorize_bus_owner?bus_owner_id={{bus_owner['_id']}}" class="btn bg-info">Authorize Now</a>
+          {% else %}
+           <a href="unauthorize_bus_owner?bus_owner_id={{bus_owner['_id']}}" class="btn btn-danger">Unauthorize Now</a>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+
+  </table>
+</div>

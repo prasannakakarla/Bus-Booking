@@ -1,0 +1,47 @@
+{% include 'ahead.html'%}
+<body class="bg_img">
+  .
+</body>
+<div class="title text-center p-20">Buses</div>
+<div class="p-20">
+  <table border="1" class="table margin">
+    <thead>
+      <tr>
+        <th>Bus_number</th>
+        <th>Bus_name</th>
+        <th>Bus_type</th>
+        <th>Available_seats</th>
+        <th>Status</th>
+        <th>image</th>
+        <th>Bus_owner</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for add_bus in add_buses %}
+      {% set bus_owner = get_bus_owner_name_by_bus_owner_id(add_bus['bus_owner_id']) %}
+      <tr>
+        <td>{{add_bus['bus_number']}}</td>
+        <td>{{add_bus['bus_name']}}</td>
+        <td>{{add_bus['bus_type']}}</td>
+        <td>{{add_bus['available_seats']}}</td>
+        <td>{{add_bus['status']}}</td>
+        <td><img src="../static/bus_image/{{add_bus['bus_image']}}" class="bus_image7"></td>
+        <td>{{bus_owner['name']}}</td>
+        <td>
+          {% if add_bus['status'] == 'unverified' %}
+          <a href="verify_bus?bus_id={{add_bus['_id']}}" class="btn bg-info">Verify Now</a>
+          {% else %}
+           <div>
+              <a href="schedules?bus_id={{add_bus['_id']}}" class="btn-1 btn-primary-1 text-white mt-20">Schedules</a>
+                </div>
+           <a href="unverify_bus?bus_id={{add_bus['_id']}}" class="btn btn-danger mt-10">Unverify Now</a>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor%}
+
+    </tbody>
+
+  </table>
+</div>

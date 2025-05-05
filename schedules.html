@@ -1,0 +1,158 @@
+{% if session['role']=='admin'%}
+{% include 'ahead.html' %}
+{% elif session['role']=='Bus Owner'%}
+{% include 'bhead.html' %}
+{% endif%}
+{% if session['role']=='admin'%}
+<div class="row">
+
+    <div class="col-6 mt-20 p-20">
+        {% for schedule in schedules %}
+        {% set bus = get_bus_by_bus_id(schedule['bus_id'])%}
+        {% set bus_owner = get_bus_owner_name_by_bus_owner_id(bus['bus_owner_id']) %}
+        {% set source_location = get_source_location_name_by_source_location_id(schedule['Source_location_id']) %}
+        {% set destination_location =
+        get_destination_location_name_by_destination_location_id(schedule['Destination_location_id'])%}
+        {% set remain_seats = get_remain_seats2(schedule['_id'],schedule['departure'],bus['available_seats'])%}
+
+        <div class="card p-20 mt-5">
+            <div class="h4" style="text-align:center">{{source_location['location_name']}} ->
+                {{destination_location['location_name']}}</div>
+            <div class="row">
+                <div class="col-4">
+                    <img src="../static/bus_image/{{bus['bus_image']}}" class="bus_image7">
+                    <div class="h5" style="text-transform: uppercase;">{{bus['bus_name']}}({{bus['bus_number']}})</div>
+                    <div>{{bus['bus_type']}}</div>
+                    <div>Capacity: {{bus['available_seats']}}</div>
+                     <div class=" "> <b> Available : {{remain_seats}}</b></div>
+                    <div> Owner Name: {{bus_owner['name']}}</div>
+                </div>
+                <div class="col-4 ml-40 mt-10">
+                    <div>Departure :  {{schedule['Departure_date_time']}}</div>
+                    <div class="mt-5">Arrival : {{schedule['Arrival_date_time']}}</div>
+
+                    <div class="mt-5">Price: ${{schedule['Price_per_seat']}}</div>
+                    <div class="mt-5">Departure Platform NUmber: {{schedule['Departure_platform_number']}}</div>
+                    <div class="mt-5">Arrival Platform Number: {{schedule['Arrival_platform_number']}}</div>
+                </div>
+                <div class="col-4">
+                    <a href="view_bookings?schedule_id={{schedule['_id']}}" class="btn btn-secondary text-white mt-20">Bookings</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>{% elif session['role']=='Bus Owner'%}
+<div class="row">
+    <div class="col-4 p-20">
+        <form action="add_schedule_action" method="post">
+            <div class="mt-20 p-20 card">
+                <div class="title text-center">Add Schedules</div>
+                <div class="p-10 container text-font">
+                    <input type="hidden" name="bus_id" value="{{bus_id}}">
+                    <div class=" mt-20 w-100">
+                        <label>Source Location</label>
+                        <select name="Source_location_id" class="form-control" required>
+                            <option selected="selected" value="" disabled="disabled">Please Select Location</option>
+                            {% for location in locations %}
+                            <option value="{{location['_id']}}" {% if str(location['_id'])==str(locations_id) %}
+                                selected {% endif %}>{{location['location_name']}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="p-10 container text-font">
+                    <div class=" mt-10 w-100">
+                        <label>Destination Location</label>
+                        <select name="Destination_location_id" class="form-control" required>
+                            <option selected="selected" value="" disabled="disabled">Please Select Location</option>
+                            {% for location in locations2 %}
+                            <option value="{{location['_id']}}" {% if str(location['_id'])==str(locations_id) %}
+                                selected {% endif %}>{{location['location_name']}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="p-10 container text-font">
+                    <label class="" for="Departure Date Time">Departure</label>
+                    <div class="form-group w-100">
+                        <input type="datetime-local" name="Departure_date_time" id="departure date time"
+                            placeholder="Enter email" class="form-control" required>
+                    </div>
+                </div>
+
+
+                <div class="p-10 container text-font">
+                    <label class="" for="Arrival Date Time">Arrival</label>
+                    <div class="form-group w-100">
+                        <input type="datetime-local" name="Arrival_date_time" id="Arrival Date Time"
+                            placeholder="Enter email" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="p-10 container text-font">
+                    <label class="" for="Departure platform number"></label>
+                    <div class="form-group w-100">
+                        <input type="number" name="Departure_platform_number" id="Departure platform number"
+                            placeholder="Enter Departure platform number " class="form-control" required>
+                    </div>
+                </div>
+                <div class="p-10 container text-font">
+                    <label class="" for="Arrival platform number"></label>
+                    <div class="form-group w-100">
+                        <input type="number" name="Arrival_platform_number" id="Arrival platform number"
+                            placeholder="Enter Arrival platform number" class="form-control" required>
+                    </div>
+                </div>
+                <div class="p-10 container text-font">
+                    <label class="" for="price per seat"></label>
+                    <div class="form-group w-100">
+                        <input type="number" name="Price_per_seat" id="price per seat"
+                            placeholder="Enter price per seat" class="form-control" required>
+                    </div>
+                </div>
+                <div class="p-20">
+                    <input type="submit" class=" btn btn-primary" value="Add">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-8 mt-20 p-20">
+        {% for schedule in schedules %}
+        {% set bus = get_bus_by_bus_id(schedule['bus_id'])%}
+        {% set bus_owner = get_bus_owner_name_by_bus_owner_id(bus['bus_owner_id']) %}
+        {% set source_location = get_source_location_name_by_source_location_id(schedule['Source_location_id']) %}
+        {% set destination_location =
+        get_destination_location_name_by_destination_location_id(schedule['Destination_location_id'])%}
+        {% set remain_seats = get_remain_seats2(schedule['_id'],schedule['departure'],bus['available_seats'])%}
+
+        <div class="card p-10 mt-5">
+            <div class="h4" style="text-align:center">{{source_location['location_name']}} ->
+                {{destination_location['location_name']}}</div>
+            <div class="row">
+                <div class="col-4">
+                    <img src="../static/bus_image/{{bus['bus_image']}}" class="bus_image7">
+                    <div class="h5" style="text-transform: uppercase;">{{bus['bus_name']}}({{bus['bus_number']}})</div>
+                    <div>{{bus['bus_type']}}</div>
+                    <div>Capacity: {{bus['available_seats']}}</div>
+                     <div class=" "> <b> Available : {{remain_seats}}</b></div>
+                    <div> Owner Name: {{bus_owner['name']}}</div>
+                </div>
+                <div class="col-4 ml-40 mt-10">
+                    <div>Departure :  {{schedule['Departure_date_time']}}</div>
+                    <div class="mt-5">Arrival : {{schedule['Arrival_date_time']}}</div>
+
+                    <div class="mt-5">Price: ${{schedule['Price_per_seat']}}</div>
+                    <div class="mt-5">Departure Platform NUmber: {{schedule['Departure_platform_number']}}</div>
+                    <div class="mt-5">Arrival Platform Number: {{schedule['Arrival_platform_number']}}</div>
+                </div>
+                <div class="col-4">
+                    <a href="view_bookings?schedule_id={{schedule['_id']}}" class="btn btn-secondary text-white mt-20">Bookings</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>{% endif%}

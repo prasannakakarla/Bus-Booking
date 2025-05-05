@@ -1,0 +1,75 @@
+{% include 'chead.html'%}
+
+<div class="row">
+    <div class="col-4 p-20 mt-20">
+        <div class="h5" style="text-align:center">Booked Seats</div>
+        <div class="row"></div>
+        <table border="1" class="table margin  mt-20 p-20" style="margin-left : 30px;">
+        <thead>
+          <tr>
+            <th>Seat</th>
+              <th>Name</th>
+              <th>Phone</th>
+              <th>Age</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for seat in booking['seat_numbers'] %}
+          <tr>
+            <td>{{seat['seat_number']}}</td>
+              <td>{{seat['name']}}</td>
+              <td>{{seat['phone']}}</td>
+              <td>{{seat['age']}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+        </table>
+
+    </div>
+    <div class="col-8 mt-20">
+        <form action="payment_action" method="post">
+            <input type="hidden" name="booking_id" value={{booking['_id']}}>
+            <input type="hidden"  name="total_price" value={{total_price}}>
+            <div class="row">
+                    <div class="card mt-20 p-10 margin">
+                        <input type="hidden" id="total_price" name="total_price">
+                        <input type="hidden" id="schedule_id" name="schedule_id">
+                        <input type="hidden" id="departure_date" name="departure_date">
+                        <div class="text-center mt-10">Price : <h2>${{total_price}}</h2></div>
+                        <div class="p-10 mt-15 text-font  container">
+                        <label class="" for="card_type"></label>
+                        <div class="form-group  w-100">
+                            <input type="text" name="card_type" id="card_type" placeholder="Enter card type" class="form-control" required>
+                        </div>
+                        </div><div class="p-10 mt-15 text-font  container">
+                        <label class="" for="card_name"></label>
+                        <div class="form-group  w-100">
+                            <input type="text" name="card_name" id="card_name" placeholder="Enter card Name" class="form-control" required>
+                        </div>
+                        </div>
+                        <div class="p-10 mt-15 text-font  container">
+                        <label class="" for="card_number"></label>
+                        <div class="form-group  w-100">
+                            <input type="text" name="card_number" id="card_number" placeholder="Enter card number" class="form-control" required>
+                        </div>
+                        </div>
+                        <div class="p-10 mt-15 text-font  container">
+                        <label class="" for="Cvv"></label>
+                        <div class="form-group  w-100">
+                            <input type="text" name="cvv" id="cvv" placeholder="Enter cvv" class="form-control" required>
+                        </div>
+                        </div>
+                        <div class="p-10 mt-15 text-font  container">
+                        <label class="" for="expiry_date"></label>
+                        <div class="form-group  w-100">
+                            <input type="text" name="expiry_date" id="expiry_date" placeholder="Enter Expiry Date" class="form-control" required>
+                        </div>
+                        </div>
+                         <div class="p-10 text-font font container">
+                        <input type="submit" class="btn-1 btn-primary-1 text-white mt-20" value="Pay">
+                        </div>
+                    </div>
+            </div>
+        </form>
+    </div>
+</div>

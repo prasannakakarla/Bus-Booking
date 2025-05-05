@@ -1,0 +1,58 @@
+{% include 'ahead.html'%}
+<div class="row">
+<style>
+  .btn {
+    background-color: rgb(108, 144, 201);
+  }
+  .btn:hover {
+        background-color: rgba(91, 169, 252, 0.9);
+    }
+</style>
+        <div class="col-6 mt-30">
+          <div class="card mt-60 p-20 cat margin ">
+                <div class="title text-center">
+                  Add Location
+                </div>
+                <form action="add_location_action" method="post">
+                  <div>
+                        <label for="location_name" ></label>
+                        <div class="form-group p-15">
+                          <input type="text" name="location_name" id="location_name" class="form-control" placeholder=" Enter Location Name">
+                        </div>
+
+                  </div>
+                  <div class="p-20">
+                    <input type="submit" class=" btn btn-primary" value="Add">
+                  </div>
+
+                </form>
+
+                {% if message!= None %}
+                  {{message}}
+                {% endif %}
+          </div>
+        </div>
+        <div class="col-6 mt-10 margin p-30">
+          <div class="title text-center">
+            View Locations
+          </div>
+              <table border="1" class="table mt-30">
+
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for location in locations%}
+                  <tr>
+                    <td>{{location['location_name']}}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+        </div>
+
+</div>
+
+
