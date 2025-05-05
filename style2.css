@@ -1,0 +1,81 @@
+<style>
+    .table {
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 8px;
+        margin-top: 20px;
+        width: 100%;
+    }
+    .table th, .table td {
+        padding: 10px;
+        text-align: center;
+    }
+    .card-2 {
+        background-color: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        border-radius: 8px;
+        padding: 20px;
+        width: 100%;
+        max-width: 500px;
+        position: relative;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1001;
+    }
+    .add_bus_form {
+        background-color: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+        position: fixed;
+        top: 350px;
+        left: 740px;
+        width: 100%;
+        height: 100vh;
+        display: none;
+        z-index: 1000;
+        overflow-y: auto;
+    }
+    #add_bus:checked ~ .add_bus_form {
+        display: block;
+    }
+    .form-control {
+        background-color: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 4px;
+        padding: 8px;
+        margin-bottom: 10px;
+        width: 100%;
+    }
+    .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        background-color: rgba(255, 255, 255, 1);
+    }
+    .add-bus-button {
+        cursor: pointer;
+        display: inline-block;
+        padding: 10px 20px;
+    }
+    .title {
+        color: #333;
+        font-weight: bold;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    .btn {
+        background-color: rgba(0, 123, 255, 0.9);
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+    .btn:hover {
+        background-color: rgba(0, 98, 204, 0.9);
+    }
+    #add_bus {
+        display: none;
+    }
+</style>
